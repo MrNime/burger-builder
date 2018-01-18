@@ -45,9 +45,17 @@ export default class BurgerBuilder extends Component {
 
   render() {
     const { ingredients } = this.state;
-    const disabledInfo = Object.assign(...Object.entries(ingredients).map(([key, value]) => ({
-      [key]: value <= 0,
-    })));
+    // const disabledInfo = Object.assign(...Object.entries(ingredients).map(([key, value]) => ({
+    //   [key]: value <= 0,
+    // })));
+    const disabledInfo = Object.entries(ingredients).reduce(
+      (acc, [k, v]) => ({
+        ...acc,
+        [k]: v <= 0,
+      }),
+      {},
+    );
+    console.log(disabledInfo);
     return (
       <React.Fragment>
         <Burger ingredients={this.state.ingredients} />
