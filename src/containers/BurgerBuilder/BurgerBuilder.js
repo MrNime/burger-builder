@@ -18,29 +18,45 @@ export default class BurgerBuilder extends Component {
       meat: 0,
     },
     totalPrice: 4,
+    purchasable: false,
   };
 
+  updatePurchaseState() {
+    // const sum = Object.keys(ingredients)
+    //   .map(igKey => ingredients[igKey])
+    //   .reduce((acc, el) => acc + el, 0);
+    // this.setState(prevState => ({ purchasable: sum > 0 }));
+    const purchasable = Object.values(this.state.ingredients).some(el => el > 0);
+    this.setState({ purchasable });
+  }
+
   addIngredientHandler = (type) => {
-    this.setState((prevState, props) => ({
-      ingredients: {
-        ...prevState.ingredients,
-        [type]: prevState.ingredients[type] + 1,
-      },
-      totalPrice: prevState.totalPrice + INGREDIENT_PRICES[type],
-    }));
+    this.setState(
+      (prevState, props) => ({
+        ingredients: {
+          ...prevState.ingredients,
+          [type]: prevState.ingredients[type] + 1,
+        },
+        totalPrice: prevState.totalPrice + INGREDIENT_PRICES[type],
+      }),
+      this.updatePurchaseState,
+    );
   };
 
   removeIngredientHandler = (type) => {
     if (this.state.ingredients[type] <= 0) {
       return;
     }
-    this.setState((prevState, props) => ({
-      ingredients: {
-        ...prevState.ingredients,
-        [type]: prevState.ingredients[type] - 1,
-      },
-      totalPrice: prevState.totalPrice - INGREDIENT_PRICES[type],
-    }));
+    this.setState(
+      (prevState, props) => ({
+        ingredients: {
+          ...prevState.ingredients,
+          [type]: prevState.ingredients[type] - 1,
+        },
+        totalPrice: prevState.totalPrice - INGREDIENT_PRICES[type],
+      }),
+      this.updatePurchaseState,
+    );
   };
 
   render() {
@@ -55,15 +71,15 @@ export default class BurgerBuilder extends Component {
       }),
       {},
     );
-    console.log(disabledInfo);
     return (
       <React.Fragment>
         <Burger ingredients={this.state.ingredients} />
-        <p>Total Price: {this.state.totalPrice}</p>
         <BuildControls
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabledInfo={disabledInfo}
+          price={this.state.totalPrice}
+          purchasable={this.state.purchasable}
         />
       </React.Fragment>
     );
