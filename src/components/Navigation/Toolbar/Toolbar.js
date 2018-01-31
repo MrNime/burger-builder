@@ -7,6 +7,8 @@ export default props => (
   <header className={classes.Toolbar}>
     <div>MENU</div>
     <Logo />
-    <NavigationItems />
+    <nav>
+      <NavigationItems />
+    </nav>
   </header>
 );
