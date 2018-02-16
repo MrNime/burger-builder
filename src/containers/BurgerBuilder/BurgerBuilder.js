@@ -16,17 +16,20 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0,
-    },
+    ingredients: null,
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
     loading: false,
+    error: false,
   };
+
+  componentDidMount() {
+    axios
+      .get('/ingredients.json')
+      .then(res => this.setState({ ingredients: res.data }))
+      .catch(error => this.setState({ error }));
+  }
 
   purchaseHandler = () => {
     this.setState({ purchasing: true });
@@ -96,41 +99,94 @@ class BurgerBuilder extends Component {
   };
 
   render() {
-    const { ingredients } = this.state;
+    const { ingredients, error, loading } = this.state;
     // const disabledInfo = Object.assign(...Object.entries(ingredients).map(([key, value]) => ({
     //   [key]: value <= 0,
     // })));
-    const disabledInfo = Object.entries(ingredients).reduce(
-      (acc, [k, v]) => ({
-        ...acc,
-        [k]: v <= 0,
-      }),
-      {},
-    );
-    const modalContent = this.state.loading ? (
+    const disabledInfo =
+      ingredients &&
+      Object.entries(ingredients).reduce(
+        (acc, [k, v]) => ({
+          ...acc,
+          [k]: v <= 0,
+        }),
+        {},
+      );
+    const modalContent = loading ? (
       <Spinner />
     ) : (
-      <OrderSummary
-        ingredients={this.state.ingredients}
-        purchaseCancelled={this.purchaseCancelHandler}
-        purchaseContinued={this.purchaseContinueHandler}
-        price={this.state.totalPrice}
-      />
+      ingredients && (
+        <OrderSummary
+          ingredients={ingredients}
+          purchaseCancelled={this.purchaseCancelHandler}
+          purchaseContinued={this.purchaseContinueHandler}
+          price={this.state.totalPrice}
+        />
+      )
     );
+
+    let burgerContent = error ? <p>Could not fetch ingredients</p> : <Spinner />;
+
+    if (ingredients) {
+      burgerContent = (
+        <React.Fragment>
+          <Burger ingredients={ingredients} />
+          <BuildControls
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler}
+            disabledInfo={disabledInfo}
+            price={this.state.totalPrice}
+            purchasable={this.state.purchasable}
+            ordered={this.purchaseHandler}
+          />
+        </React.Fragment>
+      );
+    }
+
+    // let burgerContent = null;
+    // if (error) {
+    //   burgerContent = <p>Could not fetch ingredients</p>;
+    // } else if (ingredients) {
+    //   burgerContent = (
+    //     <React.Fragment>
+    //       <Burger ingredients={ingredients} />
+    //       <BuildControls
+    //         ingredientAdded={this.addIngredientHandler}
+    //         ingredientRemoved={this.removeIngredientHandler}
+    //         disabledInfo={disabledInfo}
+    //         price={this.state.totalPrice}
+    //         purchasable={this.state.purchasable}
+    //         ordered={this.purchaseHandler}
+    //       />
+    //     </React.Fragment>
+    //   );
+    // } else {
+    //   burgerContent = <Spinner />;
+    // }
+
+    // const burgerContent = this.state.ingredients ? (
+    //   <React.Fragment>
+    //     <Burger ingredients={this.state.ingredients} />
+    //     <BuildControls
+    //       ingredientAdded={this.addIngredientHandler}
+    //       ingredientRemoved={this.removeIngredientHandler}
+    //       disabledInfo={disabledInfo}
+    //       price={this.state.totalPrice}
+    //       purchasable={this.state.purchasable}
+    //       ordered={this.purchaseHandler}
+    //     />
+    //   </React.Fragment>
+    // ) : this.state.error ? (
+    //   <p>Could not fetch ingredients</p>
+    // ) : (
+    //   <Spinner />
+    // );
     return (
       <React.Fragment>
         <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
           {modalContent}
         </Modal>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}
-          disabledInfo={disabledInfo}
-          price={this.state.totalPrice}
-          purchasable={this.state.purchasable}
-          ordered={this.purchaseHandler}
-        />
+        {burgerContent}
       </React.Fragment>
     );
   }
