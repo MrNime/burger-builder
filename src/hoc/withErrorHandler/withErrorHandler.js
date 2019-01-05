@@ -15,7 +15,10 @@ const withErrorHandler = (WrappedComponent, axios) =>
 
           // Error.message zit in het prototype van dit error object
           console.log('errorHandler object:', error);
-          console.log('errorHandler stringified:', JSON.stringify(error, null, 2));
+          console.log(
+            'errorHandler stringified:',
+            JSON.stringify(error, null, 2),
+          );
           console.log('errorHandler entries', Object.entries(error));
           console.log('errorHandler create', Object.create(error));
         },
@@ -36,7 +39,10 @@ const withErrorHandler = (WrappedComponent, axios) =>
     render() {
       return (
         <React.Fragment>
-          <Modal show={this.state.error} modalClosed={this.errorConfirmedHandler}>
+          <Modal
+            show={this.state.error}
+            modalClosed={this.errorConfirmedHandler}
+          >
             {this.state.error ? this.state.error.message : null}
           </Modal>
           <WrappedComponent {...this.props} />

@@ -125,7 +125,11 @@ class BurgerBuilder extends Component {
       )
     );
 
-    let burgerContent = error ? <p>Could not fetch ingredients</p> : <Spinner />;
+    let burgerContent = error ? (
+      <p>Could not fetch ingredients</p>
+    ) : (
+      <Spinner />
+    );
 
     if (ingredients) {
       burgerContent = (
@@ -183,7 +187,10 @@ class BurgerBuilder extends Component {
     // );
     return (
       <React.Fragment>
-        <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+        <Modal
+          show={this.state.purchasing}
+          modalClosed={this.purchaseCancelHandler}
+        >
           {modalContent}
         </Modal>
         {burgerContent}
