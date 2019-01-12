@@ -8,22 +8,16 @@ const withErrorHandler = (WrappedComponent, axios) =>
       error: null,
     };
     componentWillMount() {
-      this.requestInterceptor = axios.interceptors.response.use(
+      this.responseInterceptor = axios.interceptors.response.use(
         res => res,
         (error) => {
           this.setState({ error });
 
           // Error.message zit in het prototype van dit error object
-          console.log('errorHandler object:', error);
-          console.log(
-            'errorHandler stringified:',
-            JSON.stringify(error, null, 2),
-          );
-          console.log('errorHandler entries', Object.entries(error));
-          console.log('errorHandler create', Object.create(error));
+          // console.log('errorHandler create', Object.create(error));
         },
       );
-      this.responseInterceptor = axios.interceptors.request.use((req) => {
+      this.requestInterceptor = axios.interceptors.request.use((req) => {
         this.setState({ error: null });
         return req;
       });
