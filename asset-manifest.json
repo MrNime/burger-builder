@@ -1,7 +1,15 @@
 {
-  "main.css": "static/css/main.1dafcc3d.css",
-  "main.css.map": "static/css/main.1dafcc3d.css.map",
-  "main.js": "static/js/main.cf6c0f23.js",
-  "main.js.map": "static/js/main.cf6c0f23.js.map",
+  "main.css": "static/css/main.37c5045e.css",
+  "main.css.map": "static/css/main.37c5045e.css.map",
+  "main.js": "static/js/main.39f504bc.js",
+  "main.js.map": "static/js/main.39f504bc.js.map",
+  "static/js/0.f80123df.chunk.js": "static/js/0.f80123df.chunk.js",
+  "static/js/0.f80123df.chunk.js.map": "static/js/0.f80123df.chunk.js.map",
+  "static/js/1.a985c386.chunk.js": "static/js/1.a985c386.chunk.js",
+  "static/js/1.a985c386.chunk.js.map": "static/js/1.a985c386.chunk.js.map",
+  "static/js/2.182d10b6.chunk.js": "static/js/2.182d10b6.chunk.js",
+  "static/js/2.182d10b6.chunk.js.map": "static/js/2.182d10b6.chunk.js.map",
+  "static/js/3.97940925.chunk.js": "static/js/3.97940925.chunk.js",
+  "static/js/3.97940925.chunk.js.map": "static/js/3.97940925.chunk.js.map",
   "static\\media\\burger-logo.png": "static/media/burger-logo.b8503d26.png"
 }
