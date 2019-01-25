@@ -5,6 +5,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import { auth } from '../../store/actions';
+import { checkValidity } from '../../shared/utility';
 
 class Auth extends Component {
   state = {
@@ -40,20 +41,6 @@ class Auth extends Component {
     isSignUp: true,
   };
 
-  checkValidity = (value, rules = {}) => {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== '' && isValid;
-    }
-    if (rules.minLength) {
-      isValid = rules.minLength <= value.length && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-    return isValid;
-  };
-
   inputChangedHandler = (event, inputIdentifier) => {
     const { value } = event.target;
     this.setState((prevState) => {
@@ -62,7 +49,7 @@ class Auth extends Component {
         [inputIdentifier]: {
           ...prevState.controls[inputIdentifier],
           value,
-          valid: this.checkValidity(
+          valid: checkValidity(
             value,
             prevState.controls[inputIdentifier].validation,
           ),

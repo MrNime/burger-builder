@@ -8,6 +8,7 @@ import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import { purchaseBurger } from '../../../store/actions';
 import { getPrice } from '../../../store/selectors';
+import { checkValidity } from '../../../shared/utility';
 
 class ContactData extends Component {
   state = {
@@ -108,20 +109,6 @@ class ContactData extends Component {
     this.props.onOrderBurger(order, this.props.token);
   };
 
-  checkValidity = (value, rules = {}) => {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== '' && isValid;
-    }
-    if (rules.minLength) {
-      isValid = rules.minLength <= value.length && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-    return isValid;
-  };
-
   inputChangedHandler = (event, inputIdentifier) => {
     const { value } = event.target;
     this.setState((prevState) => {
@@ -130,7 +117,7 @@ class ContactData extends Component {
         [inputIdentifier]: {
           ...prevState.orderForm[inputIdentifier],
           value,
-          valid: this.checkValidity(
+          valid: checkValidity(
             value,
             prevState.orderForm[inputIdentifier].validation,
           ),
@@ -190,8 +177,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onOrderBurger: (orderData, token) => dispatch(purchaseBurger(orderData, token)),
+  onOrderBurger: (orderData, token) =>
+    dispatch(purchaseBurger(orderData, token)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withErrorHandler(ContactData, axios));
