@@ -6,7 +6,8 @@ import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import { authCheckState } from './store/actions';
 import Spinner from './components/UI/Spinner/Spinner';
 
-// Bug in react-router throws Failed prop type: Invalid prop `component` of type `object` supplied to `Route`, expected `function`.
+// Bug in react-router throws Failed prop type:
+// Invalid prop `component` of type `object` supplied to `Route`, expected `function`.
 // fixed in beta release of react-router
 const Checkout = React.lazy(() => import('./containers/Checkout/Checkout'));
 const Orders = React.lazy(() => import('./containers/Orders/Orders'));

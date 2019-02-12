@@ -66,10 +66,8 @@ class Auth extends Component {
     event.preventDefault();
     const email = this.state.controls.email.value;
     const password = this.state.controls.password.value;
-    this.props.onAuth(email, password, this.state.isSignUp).then(() => {
-      const path = this.props.hasBurger ? '/checkout' : '/';
-      this.props.history.push(path);
-    });
+    this.props.onAuth(email, password, this.state.isSignUp, this.props.hasBurger, this.props.history);
+    // when not using thunk but saga onAuth isn't a promise anymore, so you can't chain with .then
   };
 
   switchAuthModeHandler = () => {
@@ -118,7 +116,7 @@ class Auth extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const hasBurger = Object.values(state.burgerBuilder.ingredients).some(el => el > 0);
+  const hasBurger = Object.values(state.burgerBuilder.ingredients || {}).some(el => el > 0);
   return {
     loading: state.auth.loading,
     error: state.auth.error,
@@ -127,8 +125,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onAuth: (email, password, isSignUp) =>
-    dispatch(auth(email, password, isSignUp)),
+  onAuth: (email, password, isSignUp, hasBurger, history) =>
+    dispatch(auth(email, password, isSignUp, hasBurger, history)),
 });
 
 export default connect(
